@@ -1,31 +1,36 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PokemonType, SinglePokemonType } from "../interfaces/interface";
 
 export interface PokemonState {
-  pokemons: any[]; // Define the type based on the API response
+  pokemons: PokemonType[]; // Define the type based on the API response
   loading: boolean;
+  pokemonDetails: SinglePokemonType | null; // Change to a single object or null if no details
 }
 
 const initialState: PokemonState = {
   pokemons: [],
   loading: false,
+  pokemonDetails: null, // Add the pokemonDetails property
 };
 
 export const pokemonSlice = createSlice({
   name: "pokemon",
   initialState,
   reducers: {
-    setPokemons: (state, action: PayloadAction<any>) => {
+    setPokemons: (state, action: PayloadAction<PokemonType[]>) => {
       state.pokemons = [...state.pokemons, ...action.payload];
-      // state.pokemons = action.payload; // Replace the existing list
-
       state.loading = false;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    setPokemonDetails: (state, action: PayloadAction<SinglePokemonType>) => {
+      state.pokemonDetails = action.payload;
+    },
   },
 });
 
-export const { setPokemons, setLoading } = pokemonSlice.actions;
+export const { setPokemons, setLoading, setPokemonDetails } =
+  pokemonSlice.actions;
 
 export default pokemonSlice.reducer;

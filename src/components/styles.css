@@ -1,0 +1,31 @@
+.Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.Overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+/* // const [selectedPokemon, setSelectedPokemon] = useState<SinglePokemonType>(
+//   // Initialize with an example object or leave it undefined
+//   {
+//     id: 1,
+//     name: "",
+//     height: 1,
+//     weight: 1,
+//     base_experience: 1,
+//     sprites: {
+//       front_default: "",
+//       back_default: "",
+//     },
+//     types: [{ type: { name: "" } }],
+//     abilities: [{ ability: { name: "" } }],
+//     held_items: [{ item: { name: "" } }],
+//     species: { name: "" },
+//   }
+// ); */

@@ -1,15 +1,13 @@
 import { AxiosResponse } from "axios"; // Import AxiosResponse type
 import { all, call, put, takeEvery } from "redux-saga/effects";
-import { fetchPokemons } from "../api/pokemonApi";
-
-import { setLoading, setPokemons } from "./pokemonSlice";
-interface FetchPokemonsAction {
-  type: "pokemon/fetchPokemons";
-  payload: {
-    limit: 20;
-    offset: 0;
-  };
-}
+import { fetchPokemonDetails, fetchPokemons } from "../api/pokemonApi";
+import {
+  FetchPokemonDetailsAction,
+  FetchPokemonsAction,
+  PokemonListResponse,
+  SinglePokemonType,
+} from "../interfaces/interface";
+import { setLoading, setPokemonDetails, setPokemons } from "./pokemonSlice";
 
 function* fetchPokemonsSaga(action: FetchPokemonsAction) {
   try {
@@ -18,12 +16,12 @@ function* fetchPokemonsSaga(action: FetchPokemonsAction) {
     yield put(setLoading(true));
 
     //  type annotation for response
-    const response: AxiosResponse<any> = yield call(
+    const response: AxiosResponse<PokemonListResponse> = yield call(
       fetchPokemons,
       limit,
       offset
     );
-    console.log(response, "response");
+    console.log(response, "pokes List response");
 
     yield put(setPokemons(response.data.results));
   } catch (error) {
@@ -33,10 +31,31 @@ function* fetchPokemonsSaga(action: FetchPokemonsAction) {
   }
 }
 
+function* fetchPokemonDetailsSaga(action: FetchPokemonDetailsAction) {
+  try {
+    const { url } = action.payload || {};
+
+    const response: AxiosResponse<SinglePokemonType> = yield call(
+      fetchPokemonDetails,
+      url
+    );
+    console.log(response, "single poke response");
+
+    // Dispatch action to set detailed information for the selected Pokémon
+    yield put(setPokemonDetails(response.data));
+  } catch (error) {
+    console.error("Error fetching pokemon details:", error);
+  }
+}
+
 function* watchFetchPokemons() {
   yield takeEvery("pokemon/fetchPokemons", fetchPokemonsSaga);
 }
 
+function* watchFetchPokemonDetails() {
+  yield takeEvery("pokemon/fetchPokemonDetails", fetchPokemonDetailsSaga);
+}
+
 export default function* rootSaga() {
-  yield all([watchFetchPokemons()]);
+  yield all([watchFetchPokemons(), watchFetchPokemonDetails()]);
 }
