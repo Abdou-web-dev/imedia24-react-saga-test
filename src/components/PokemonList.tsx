@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { useDispatch, useSelector } from "react-redux";
+import { SinglePokemon } from "../components/SinglePokemon";
 import { PokemonType, SinglePokemonType } from "../interfaces/interface";
 import { RootState } from "../store";
+import { CustomSpin } from "./CustomSpinner";
+import { PokemonModal } from "./PokemonModal";
 import "./styles.css";
 
 export const PokemonList: React.FC = () => {
@@ -14,16 +17,27 @@ export const PokemonList: React.FC = () => {
   );
   const [pokemons, setPokemons] = useState(pokemonData);
   const [isOpen, setIsOpen] = useState(false);
+  const [loadingVisible, setLoadingVisible] = useState(false);
 
   useEffect(() => {
-    // Initial fetch when the component mounts
-    dispatch({
-      type: "pokemon/fetchPokemons",
-      payload: {
-        limit: 20,
-        offset: 0,
-      },
-    });
+    setLoadingVisible(true); // Set loadingVisible to true during initial fetch
+
+    // Introducing a delay of 800 milliseconds before fetching initial pokemons
+    const initialFetchTimeout = setTimeout(() => {
+      dispatch({
+        type: "pokemon/fetchPokemons",
+        payload: {
+          limit: 50,
+          offset: 0,
+        },
+      });
+      setLoadingVisible(false);
+    }, 800);
+
+    // Cleanup the timeout when the component unmounts or when the fetch is successful
+    return () => {
+      clearTimeout(initialFetchTimeout);
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -31,15 +45,21 @@ export const PokemonList: React.FC = () => {
       const isBottom =
         window.innerHeight + window.scrollY >= document.body.offsetHeight;
 
-      if (isBottom && !loading) {
+      if (isBottom && !loadingVisible && !loading) {
+        setLoadingVisible(true);
+
         // Fetch next set of pokemons
-        dispatch({
-          type: "pokemon/fetchPokemons",
-          payload: {
-            limit: 20,
-            offset: pokemons.length,
-          },
-        });
+        setTimeout(() => {
+          // Fetch next set of pokemons
+          dispatch({
+            type: "pokemon/fetchPokemons",
+            payload: {
+              limit: 20,
+              offset: pokemons.length,
+            },
+          });
+          setLoadingVisible(false);
+        }, 800);
       }
     };
 
@@ -52,8 +72,29 @@ export const PokemonList: React.FC = () => {
 
   useEffect(() => {
     // Update the displayed pokemons when pokemonData changes
-    setPokemons(pokemonData);
+    const uniquePokemons = removeDuplicatesByName(pokemonData);
+    setPokemons(uniquePokemons);
   }, [pokemonData]);
+
+  // Function to remove duplicates from the array based on Pokemon names
+  // the function iterates through the pokemonArray, keeping track of unique names using the uniquePokemonNames object. It uses the filter function to create a new array containing only the first occurrence of each unique Pokemon name.
+  const removeDuplicatesByName = (
+    pokemonArray: PokemonType[]
+  ): PokemonType[] => {
+    const uniquePokemonNames: Record<string, boolean> = {};
+
+    // Use filter to keep only the first occurrence of each unique name
+    const uniquePokemons = pokemonArray.filter((pokemon) => {
+      if (!uniquePokemonNames[pokemon.name]) {
+        //This condition checks if the current Pokemon's name (pokemon.name) is not present as a key in the uniquePokemonNames object.
+        uniquePokemonNames[pokemon.name] = true; // true serves as a placeholder to indicate the presence of the Pokemon name in the set. //The ! (logical NOT) operator negates the result, so the condition is true when the name is not in the object.
+        return true;
+      }
+      return false;
+    });
+
+    return uniquePokemons;
+  };
 
   const handlePokemonClick = (pokemon: PokemonType) => {
     setIsOpen(true);
@@ -65,49 +106,30 @@ export const PokemonList: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    // Set the app element for react-modal
+    Modal.setAppElement("#root");
+    //react-modal: App element is not defined. Please use `Modal.setAppElement(el)` or set `appElement={el}`. This is needed so screen readers don't see main content when modal is opened.
+  }, []);
+
   return (
     <div className="">
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {pokemons?.map((pokemon: PokemonType, index) => (
-          <li
+          <SinglePokemon
             key={pokemon.name}
-            onClick={() => handlePokemonClick(pokemon)}
-            className="p-4 rounded bg-gray-200 cursor-pointer hover:bg-gray-300"
-          >
-            {index + " " + pokemon.name}
-          </li>
+            {...{ handlePokemonClick, pokemon, index }}
+          ></SinglePokemon>
         ))}
-        {loading && <div>Loading...</div>}
       </ul>
 
-      {/* Display modal or additional information */}
-      <Modal
-        isOpen={isOpen}
-        // onAfterOpen={afterOpenModal}
-        onRequestClose={() => setIsOpen(false)}
-        // onRequestClose={closeModal}
-        // style={customStyles}
-        contentLabel="Example Modal"
-        className={`w-2/3`}
-      >
-        <h2>Pokemon Details : </h2>
-        {singlePokemonDetails && (
-          <div>
-            <h2>{singlePokemonDetails.name}</h2>
-            {singlePokemonDetails.abilities.map((ability, index) => (
-              <div key={index}>
-                ability no {index} :
-                <span className="text-red-600"> {ability.ability.name}</span>
-              </div>
-            ))}
-            <img
-              src={singlePokemonDetails.sprites?.front_default}
-              alt={singlePokemonDetails.name}
-              className="mb-4"
-            />
-          </div>
-        )}
-      </Modal>
+      {loadingVisible && (
+        <div className="text-center my-8">
+          <CustomSpin />
+        </div>
+      )}
+
+      <PokemonModal {...{ isOpen, loading, setIsOpen, singlePokemonDetails }} />
     </div>
   );
 };

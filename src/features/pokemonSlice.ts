@@ -26,6 +26,7 @@ export const pokemonSlice = createSlice({
     },
     setPokemonDetails: (state, action: PayloadAction<SinglePokemonType>) => {
       state.pokemonDetails = action.payload;
+      state.loading = false;
     },
   },
 });

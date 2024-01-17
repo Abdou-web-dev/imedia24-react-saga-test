@@ -3,10 +3,17 @@ export interface SinglePokemonType {
   name: string;
   height: number;
   weight: number;
+  width: number;
   base_experience: number;
   sprites: {
     front_default: string;
     back_default: string;
+    other: {
+      "official-artwork": {
+        front_shiny: string;
+        front_default: string;
+      };
+    };
   };
   types: {
     type: {

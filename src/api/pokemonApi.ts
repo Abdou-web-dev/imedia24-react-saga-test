@@ -1,18 +1,31 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import {
+  PokemonListResponse,
+  SinglePokemonType,
+} from "../interfaces/interface";
 
 const POKE_API_URL = "https://pokeapi.co/api/v2";
 
-export const fetchPokemons = (limit: number, offset: number): Promise<any> => {
-  // return axios.get(`${POKE_API_URL}/pokemon`);
-  return axios.get(`${POKE_API_URL}/pokemon?limit=${limit}&offset=${offset}`);
+const fetchPokemons = (
+  limit: number,
+  offset: number
+): Promise<AxiosResponse<PokemonListResponse>> => {
+  const pokeResponse: Promise<AxiosResponse<PokemonListResponse>> = axios.get(
+    `${POKE_API_URL}/pokemon?limit=${limit}&offset=${offset}`
+  );
+  // console.log(pokeResponse, "pokeRequest");
+  // pokeRequest is a Promise representing the asynchronous request being made to the Pokemon API using Axios. The response itself will be available once the request is fulfilled.
+  return pokeResponse;
 };
 
-export const fetchPokemonDetails = (pokemonUrl: string): Promise<any> => {
-  return axios.get(pokemonUrl);
+const fetchPokemonDetails = (
+  pokemonUrl: string
+): Promise<AxiosResponse<SinglePokemonType>> => {
+  // for better readability
+  const pokemonDetailsResponse: Promise<AxiosResponse<SinglePokemonType>> =
+    axios.get(pokemonUrl);
+  // console.log(pokemonDetailsResponse, "pokemonDetailsResponse");
+  return pokemonDetailsResponse;
 };
 
-// const api = {
-//   fetchPokemons, // === fetchPokemons:fetchPokemons,
-// };
-
-// export default api;
+export { fetchPokemonDetails, fetchPokemons };

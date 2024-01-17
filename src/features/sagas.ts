@@ -34,6 +34,7 @@ function* fetchPokemonsSaga(action: FetchPokemonsAction) {
 function* fetchPokemonDetailsSaga(action: FetchPokemonDetailsAction) {
   try {
     const { url } = action.payload || {};
+    yield put(setLoading(true)); // updating the loading state to true before starting the data fetching operation, ensuring that the loading indicator is displayed during the fetch.
 
     const response: AxiosResponse<SinglePokemonType> = yield call(
       fetchPokemonDetails,
@@ -45,6 +46,8 @@ function* fetchPokemonDetailsSaga(action: FetchPokemonDetailsAction) {
     yield put(setPokemonDetails(response.data));
   } catch (error) {
     console.error("Error fetching pokemon details:", error);
+  } finally {
+    yield put(setLoading(false)); // updating the loading state to false after the fetch, to indicate that the details data is ready
   }
 }
 
