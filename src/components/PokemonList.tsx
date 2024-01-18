@@ -18,6 +18,8 @@ export const PokemonList: React.FC = () => {
   const [pokemons, setPokemons] = useState(pokemonData);
   const [isOpen, setIsOpen] = useState(false);
   const [loadingVisible, setLoadingVisible] = useState(false);
+  //loading state retrieved from the Redux store (through useSelector) is used to manage the loading state related to data fetching from the POKE API,
+  // and loadingVisible state variable is used locally in this component to manage the visibility of the loading spinner separately.
 
   useEffect(() => {
     setLoadingVisible(true); // Set loadingVisible to true during initial fetch
@@ -42,8 +44,11 @@ export const PokemonList: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const isBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight;
+      const windowHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+      const bodyHeight = document.body.offsetHeight;
+      const isBottom = windowHeight + scrollY + 1 >= bodyHeight;
+      // This condition is used to determine if the user has scrolled to the bottom of the page.
 
       if (isBottom && !loadingVisible && !loading) {
         setLoadingVisible(true);
@@ -113,7 +118,7 @@ export const PokemonList: React.FC = () => {
   }, []);
 
   return (
-    <div className="">
+    <div className="pokemon-list">
       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {pokemons?.map((pokemon: PokemonType, index) => (
           <SinglePokemon

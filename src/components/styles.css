@@ -221,6 +221,10 @@
   padding-top: 2rem;
 }
 
+.ReactModal__Content.ReactModal__Content--after-open.modal-small-screen {
+  /* width: 90% !important; */
+}
+
 .ReactModal__Content.ReactModal__Content--after-open {
   overflow-y: scroll;
 }
@@ -240,4 +244,75 @@
 .ReactModal__Content.ReactModal__Content--after-open::-webkit-scrollbar-thumb:hover {
   border-radius: 10px;
   background: rgba(23, 22, 22, 0.44);
+}
+.poke-extra-details-grp-2 {
+  border: 1px solid lightblue;
+  padding: 0.8rem;
+  margin-right: 3rem;
+}
+.poke-extra-details-grp-2.grp-2-flex {
+  border: 1px solid lightblue;
+  padding: 0.8rem;
+  max-width: 50%;
+  /* margin-right: 3rem; */
+  margin: 0 auto;
+}
+.poke-extra-details-grp-2.grp-2-grid {
+  border: 1px solid lightblue;
+  padding: 0.8rem;
+  max-width: 100%;
+  margin: 0 1.5rem;
+}
+.grp-2-inner.grp-2-inner-grid {
+  height: 15rem; /* Set a fixed height for the container */
+  overflow-y: auto; /* Use auto to display scrollbar only when needed */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.grp-2-inner.grp-2-inner-flex {
+  height: 10rem;
+  /* max-height: 5rem; */
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* efefeef */
+.grp-2-inner::-webkit-scrollbar {
+  width: 10px;
+}
+.grp-2-inner::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(187, 6, 6, 0.05);
+}
+.grp-2-inner::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.811);
+}
+
+.grp-2-inner::-webkit-scrollbar-thumb:hover {
+  border-radius: 10px;
+  background: rgba(23, 22, 22, 0.44);
+}
+
+.grp-2-inner div span.move {
+  border-bottom-width: 0.5px;
+}
+.sm-txt {
+  font-size: 10px;
+}
+
+.single-poke.poke-mobile-screen {
+  width: 120%;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin: 0 auto; */
+}
+
+.single-poke.poke-mobile-screen div.poke-inner {
+  gap: 1.5rem;
 }

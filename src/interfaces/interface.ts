@@ -33,6 +33,12 @@ export interface SinglePokemonType {
   species: {
     name: string;
   };
+  moves: {
+    move: {
+      name: string;
+      url: string;
+    };
+  }[];
 }
 export interface PokemonType {
   url: string;
