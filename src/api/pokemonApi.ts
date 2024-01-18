@@ -13,7 +13,6 @@ const fetchPokemons = (
   const pokeResponse: Promise<AxiosResponse<PokemonListResponse>> = axios.get(
     `${POKE_API_URL}/pokemon?limit=${limit}&offset=${offset}`
   );
-  // console.log(pokeResponse, "pokeRequest");
   // pokeRequest is a Promise representing the asynchronous request being made to the Pokemon API using Axios. The response itself will be available once the request is fulfilled.
   return pokeResponse;
 };

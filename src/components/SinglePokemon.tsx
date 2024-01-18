@@ -1,27 +1,63 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, MouseEvent, useEffect, useRef } from "react";
 import pokeballImage from "../assets/img/pokeball.svg";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { PokemonType } from "../interfaces/interface";
 
 interface PokemonProps {
   pokemon: PokemonType;
-  handlePokemonClick: (pokemon: PokemonType) => void;
+  handlePokemonClick: (pokemon: PokemonType, index: number) => void;
   index: number;
+  isSelected: boolean;
+  setSelectedPokemonIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  isOpen: boolean;
 }
 
 export const SinglePokemon: FunctionComponent<PokemonProps> = ({
   pokemon,
   handlePokemonClick,
   index,
+  isSelected,
+  isOpen,
+  setSelectedPokemonIndex,
 }: PokemonProps) => {
   const isMobileScreen = useMediaQuery("(max-width: 640px)");
+  const isVerySmallScreen = useMediaQuery("(max-width: 350px)");
+  const pokemonRef = useRef<HTMLLIElement | null>(null);
 
+  const handleClickOutside = (event: MouseEvent) => {
+    // the combined condition is checking if the click happened outside the Pokemon item when the Pokemon item is rendered, and the modal is not open.
+    if (
+      pokemonRef.current &&
+      !pokemonRef.current.contains(event.target as Node) &&
+      !isOpen
+    ) {
+      // Clicked outside of the Pokemon item, remove the selection
+      setSelectedPokemonIndex(null);
+    }
+  };
+
+  useEffect(() => {
+    const listener: any = (event: MouseEvent) => handleClickOutside(event);
+
+    // Add event listener when the component mounts
+    document.addEventListener("mousedown", listener);
+
+    // Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener("mousedown", listener);
+    };
+  }, [handleClickOutside]);
+  // console.log(isOpen, "isOpen from SinglePokemon component");
   return (
     <li
       className={`single-poke p-8 rounded bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all group relative ${
         isMobileScreen ? "poke-mobile-screen" : ""
-      }`}
-      onClick={() => handlePokemonClick(pokemon)}
+      } 
+      ${isVerySmallScreen ? "poke-tiny-screen" : ""} 
+      
+      ${isSelected ? "border-2 border-blue-950 transition-none" : ""}`} //to ensure that the border changes happen without any transition effect.
+      onClick={() => handlePokemonClick(pokemon, index)}
+      ref={pokemonRef}
     >
       {isMobileScreen && (
         // Display Pokeball image for mobile screens

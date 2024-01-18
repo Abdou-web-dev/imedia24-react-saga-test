@@ -20,6 +20,9 @@ export const PokemonList: React.FC = () => {
   const [loadingVisible, setLoadingVisible] = useState(false);
   //loading state retrieved from the Redux store (through useSelector) is used to manage the loading state related to data fetching from the POKE API,
   // and loadingVisible state variable is used locally in this component to manage the visibility of the loading spinner separately.
+  const [selectedPokemonIndex, setSelectedPokemonIndex] = useState<
+    number | null
+  >(null);
 
   useEffect(() => {
     setLoadingVisible(true); // Set loadingVisible to true during initial fetch
@@ -101,8 +104,9 @@ export const PokemonList: React.FC = () => {
     return uniquePokemons;
   };
 
-  const handlePokemonClick = (pokemon: PokemonType) => {
+  const handlePokemonClick = (pokemon: PokemonType, index: number) => {
     setIsOpen(true);
+    setSelectedPokemonIndex(index);
     dispatch({
       type: "pokemon/fetchPokemonDetails",
       payload: {
@@ -119,12 +123,21 @@ export const PokemonList: React.FC = () => {
 
   return (
     <div className="pokemon-list">
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {pokemons?.map((pokemon: PokemonType, index) => (
           <SinglePokemon
             key={pokemon.name}
-            {...{ handlePokemonClick, pokemon, index }}
+            {...{
+              handlePokemonClick,
+              pokemon,
+              index,
+              isSelected: index === selectedPokemonIndex,
+              // This is a comparison between the current index of the mapped Pokémon (index) and the index of the Pokémon that is currently selected (selectedPokemonIndex). If these two values are equal, it means that the current Pokémon being mapped is the one that is selected.
+              setSelectedPokemonIndex,
+              isOpen,
+            }}
           ></SinglePokemon>
+          // This allows the SinglePokemon component to conditionally apply styles or behavior based on whether it is the selected Pokémon or not.
         ))}
       </ul>
 

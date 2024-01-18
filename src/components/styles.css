@@ -263,6 +263,24 @@
   max-width: 100%;
   margin: 0 1.5rem;
 }
+.poke-extra-details-grp-2.grp-2-medium-screen .grp-2-inner-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  padding-top: 0.5rem;
+  /* border: 1px solid red; */
+}
+.poke-extra-details-grp-2.grp-2-small-screen .grp-2-inner-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 0.4rem;
+  padding-top: 0.5rem;
+}
+.poke-extra-details-grp-2.grp-2-small-screen .grp-2-inner-grid span {
+  font-size: 1rem;
+}
+
 .grp-2-inner.grp-2-inner-grid {
   height: 15rem; /* Set a fixed height for the container */
   overflow-y: auto; /* Use auto to display scrollbar only when needed */
@@ -306,6 +324,14 @@
 
 .single-poke.poke-mobile-screen {
   width: 120%;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin: 0 auto; */
+}
+.single-poke.poke-tiny-screen {
+  width: 100%;
   height: 150px;
   display: flex;
   justify-content: center;
