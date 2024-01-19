@@ -30,6 +30,7 @@ export const PokemonModal: FunctionComponent<PokemonModalProps> = ({
 
   return (
     <Modal
+      data-testid="poke-modal-test"
       isOpen={isOpen}
       onRequestClose={() => setIsOpen(false)}
       contentLabel="Poke Modal"

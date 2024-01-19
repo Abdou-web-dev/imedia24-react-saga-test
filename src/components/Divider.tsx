@@ -13,7 +13,7 @@ const Divider: FunctionComponent<DividerProps> = ({ smallDivider }) => {
     >
       <hr
         className={`w-60 border-t border-gray-300 ${
-          smallDivider ? "small-d w-32 " : ""
+          smallDivider ? "small-d w-16 " : ""
         }`}
       />
     </div>

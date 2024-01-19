@@ -1,5 +1,5 @@
 import { FunctionComponent, MouseEvent, useEffect, useRef } from "react";
-import pokeballImage from "../assets/img/pokeball.svg";
+import pokeballImage from "../assets/img/pokeball.png";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { PokemonType } from "../interfaces/interface";
 
@@ -48,13 +48,14 @@ export const SinglePokemon: FunctionComponent<PokemonProps> = ({
     };
   }, [handleClickOutside]);
   // console.log(isOpen, "isOpen from SinglePokemon component");
+
   return (
     <li
+      data-testid="poke-elem-test"
       className={`single-poke p-8 rounded bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all group relative ${
         isMobileScreen ? "poke-mobile-screen" : ""
       } 
       ${isVerySmallScreen ? "poke-tiny-screen" : ""} 
-      
       ${isSelected ? "border-2 border-blue-950 transition-none" : ""}`} //to ensure that the border changes happen without any transition effect.
       onClick={() => handlePokemonClick(pokemon, index)}
       ref={pokemonRef}

@@ -51,11 +51,11 @@ function* fetchPokemonDetailsSaga(action: FetchPokemonDetailsAction) {
   }
 }
 
-function* watchFetchPokemons() {
+export function* watchFetchPokemons() {
   yield takeEvery("pokemon/fetchPokemons", fetchPokemonsSaga);
 }
 
-function* watchFetchPokemonDetails() {
+export function* watchFetchPokemonDetails() {
   yield takeEvery("pokemon/fetchPokemonDetails", fetchPokemonDetailsSaga);
 }
 

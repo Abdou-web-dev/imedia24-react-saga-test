@@ -205,11 +205,11 @@ export const PokeExtraDetails: FunctionComponent<PokeExtraDetailsProps> = ({
             {singlePokemonDetails?.types?.map((type, index) => (
               <div
                 key={index}
-                className={`mb-2 flex justify-center flex-row items-center gap-4
+                className={`mb-2 flex justify-center flex-row items-center 
                     ${
                       is_screen_less_800px
                         ? "grp-3-inner-less__800px flex flex-col gap-0"
-                        : ""
+                        : "gap-4"
                     }
                     `} //responsive design adjustment for screens less than 800 pixels wide
               >
@@ -227,9 +227,11 @@ export const PokeExtraDetails: FunctionComponent<PokeExtraDetailsProps> = ({
                   width={`45px`}
                   alt="LOGO"
                 />
-                {index === 0 && is_screen_less_800px && (
-                  <Divider smallDivider={true}></Divider>
-                )}
+                {singlePokemonDetails?.types?.length > 1 &&
+                  index === 0 &&
+                  is_screen_less_800px && (
+                    <Divider smallDivider={true}></Divider>
+                  )}
                 {/* The line {index === 0 && <Divider smallDivider={true}></Divider>} ensures that the <Divider> component is rendered only for the first type in the array. This helps create a visual separation between different types, but it's applied only once for the first type. */}
               </div>
             ))}

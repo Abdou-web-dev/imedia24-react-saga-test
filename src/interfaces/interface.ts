@@ -23,7 +23,10 @@ export interface SinglePokemonType {
   abilities: {
     ability: {
       name: string;
+      url?: string;
     };
+    is_hidden?: boolean;
+    slot?: number;
   }[];
   held_items: {
     item: {
@@ -40,6 +43,23 @@ export interface SinglePokemonType {
     };
   }[];
 }
+export interface AnotherPokemonType {
+  types?: {
+    type: {
+      name: string;
+    };
+  }[];
+  abilities?: {
+    ability: {
+      name: string;
+      url?: string;
+    };
+    is_hidden?: boolean;
+    slot?: number;
+  }[];
+  // an array of objects , this array is named types, each object of the array has a nested sub-object called type with a key "name" and a string value
+}
+
 export interface PokemonType {
   url: string;
   name: string;
